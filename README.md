@@ -57,38 +57,27 @@ This means that the output will be:
 524
 5248
 ```
-Note that all suspended functions are momentairly stored in the stack, until they are used.
+### Stack Behavior
 
-You can Immagine this flow as 2 arrows pointing different directions: one is pointing down, reducing the number but not printing anything, since the function calls itself and "starts over" and the print function is not "seen" by the program.
+Each recursive call is added to the stack. The function continues calling itself until the base case (`n == 0`) is reached. At that point, the stack starts "unwinding," and the numbers are printed as the functions return.
 
-When the recursive process is completed, the stack starts from the last function stored to be freed, imagine this as an arrow pointing up. In this case, the number is printed and incremented every time.
+You can imagine the flow as two arrows:
 
-Good, but this is not the ......
+- The first arrow points **down**, representing the recursive calls, where the number is reduced but not printed yet.
+- After reaching the base case, the second arrow points **up**, symbolizing the return from the recursive calls where the number is printed as the stack unwinds.
 
+### Descending Order Printing
 
-
-
-
-
-
-
-
-
-Imagine the recursive process as a sequence of arrows:
-
-### Printing after the recursive call (descending order):
-
-- The arrow goes down first, meaning we call the recursive function to reduce the number and solve the smaller subproblem.
-- During the "downward path," the program suspends each recursive call and accumulates the results in the call stack, without printing anything.
-- Once we reach the base case (n=0), the function stops making additional calls, and at that point, it starts ascending, printing the numbers in reverse order: starting from the smallest number (e.g., 5, then 52, then 524, and finally 5248).
+But what if we wanted to print the sequence in descending order instead of ascending? In that case, we would adjust the code as follows:
 
 ```python
 def recursive(n):
     if n == 0:
         return
-    recursive(n // 10)  # Recursive call first
-    print(n)  # Print after the recursion
+    print(n)  # Print before the recursion
+    recursive(n // 10)  # Recursive call after
 
 recursive(5248)
+```
 
-
+In this version, we are still using recursion, but this time we placed **the print function before the recursive call**. Now, the function doesn’t need to store values in the stack for printing—they are printed immediately as the recursion goes deeper. You can think of this as a **single arrow going down**, with the number printed right away on each recursive call.
